@@ -527,6 +527,24 @@ footer p {
 /* --- Responsive --- */
 
 @media (max-width: 800px) {
+  .nav__inner {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 0;
+    gap: 6px;
+  }
+
+  .nav__links {
+    flex-wrap: wrap;
+  }
+
+  .compare-selector,
+  .rate-selector {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .cards,
   .cards--3col {
     grid-template-columns: 1fr;

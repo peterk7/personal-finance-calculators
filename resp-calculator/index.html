@@ -36,6 +36,13 @@
           <select id="childAge"></select>
         </div>
         <div class="control-group control-group--grow">
+          <label for="lumpSum">Lump Sum Available Today</label>
+          <div class="slider-row">
+            <input type="range" id="lumpSumSlider" min="0" max="50000" step="500" value="0">
+            <span class="input-currency">$<input type="number" id="lumpSum" value="0" min="0" max="50000" step="500"></span>
+          </div>
+        </div>
+        <div class="control-group control-group--grow">
           <label for="annualContribution">Annual Contribution</label>
           <div class="slider-row">
             <input type="range" id="annualContributionSlider" min="0" max="16000" step="100" value="2500">
@@ -81,7 +88,7 @@
 
       <div class="strategy-card strategy-card--optimal">
         <div class="strategy-card__header">
-          <span class="strategy-card__badge">Optimal Plan</span>
+          <span class="strategy-card__badge">Max Gov Money Extraction</span>
           <span class="strategy-card__contribution" id="optimalPlanLabel"></span>
         </div>
         <div class="strategy-card__stats">
@@ -104,7 +111,36 @@
         </div>
         <div class="strategy-card__delta" id="optimalDelta"></div>
       </div>
+
+      <div class="strategy-card strategy-card--lump">
+        <div class="strategy-card__header">
+          <span class="strategy-card__badge">Set &amp; Forget</span>
+          <span class="strategy-card__contribution">$50,000 in year 1</span>
+        </div>
+        <div class="strategy-card__stats">
+          <div class="stat-row">
+            <span class="stat-label">Total Contributions</span>
+            <span class="stat-value" id="lumpContributions">$0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">CESG Grants</span>
+            <span class="stat-value stat-value--green" id="lumpCESG">$0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Investment Growth</span>
+            <span class="stat-value stat-value--purple" id="lumpGrowth">$0</span>
+          </div>
+          <div class="stat-row stat-row--total">
+            <span class="stat-label">Total at 18</span>
+            <span class="stat-value stat-value--big" id="lumpTotal">$0</span>
+          </div>
+        </div>
+        <div class="strategy-card__cesg-note" id="lumpCESGNote"></div>
+        <div class="strategy-card__delta" id="lumpDelta"></div>
+      </div>
     </section>
+
+    <section class="ideal-state" id="idealState"></section>
 
     <section class="recommendation" id="recommendation"></section>
 
@@ -126,7 +162,8 @@
       <h2>Year-by-Year Breakdown</h2>
       <div class="table-tabs">
         <button class="table-tab table-tab--active" data-tab="user">Your Plan</button>
-        <button class="table-tab" data-tab="optimal">Optimal Plan</button>
+        <button class="table-tab" data-tab="optimal">Max Gov Extraction</button>
+        <button class="table-tab" data-tab="lump">Lump &amp; Forget</button>
       </div>
       <div class="table-scroll">
         <table class="breakdown-table" id="breakdownTable">

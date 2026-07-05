@@ -201,7 +201,7 @@ main {
 
 .strategy-comparison {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   margin-bottom: 32px;
 }
@@ -247,6 +247,15 @@ main {
 .strategy-card--optimal .strategy-card__badge {
   background: var(--green-bg);
   color: var(--green);
+}
+
+.strategy-card--lump {
+  border-top-color: var(--amber);
+}
+
+.strategy-card--lump .strategy-card__badge {
+  background: var(--amber-bg);
+  color: var(--amber);
 }
 
 .strategy-card__contribution {
@@ -327,6 +336,35 @@ main {
   background: var(--bg);
   color: var(--text-muted);
 }
+
+/* --- Ideal State Verdict --- */
+
+.ideal-state {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 32px;
+  border-left: 4px solid var(--amber);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.ideal-state:empty { display: none; }
+
+.ideal-state__title {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 10px;
+}
+
+.ideal-state strong { color: var(--text); }
+.ideal-state .highlight { color: var(--green); font-weight: 600; }
+.ideal-state .highlight--amber { color: var(--amber); font-weight: 600; }
 
 /* --- Recommendation --- */
 
@@ -544,10 +582,27 @@ footer p {
 
   .control-row {
     flex-direction: column;
+    align-items: stretch;
     gap: 16px;
   }
 
-  .control-group--grow { min-width: unset; }
+  .control-group,
+  .control-group--grow {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .control-group select {
+    width: 100%;
+  }
+
+  .table-tabs {
+    flex-wrap: wrap;
+  }
+
+  .table-tab {
+    padding: 8px 12px;
+  }
 
   .strategy-comparison {
     grid-template-columns: 1fr;
