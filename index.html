@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Finance Calculators</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --border: #e5e7eb;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111827;
+        --card-bg: #1f2937;
+        --text: #f3f4f6;
+        --muted: #9ca3af;
+        --accent: #60a5fa;
+        --border: #374151;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    header p {
+      color: var(--muted);
+    }
+
+    .card {
+      display: block;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .card h2 {
+      font-size: 1.15rem;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .card time {
+      display: inline-block;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+    }
+
+    .extra {
+      font-size: 0.85rem;
+      margin-top: 0.35rem;
+    }
+
+    .extra a {
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <h1>Personal Finance Calculators</h1>
+      <p>Interactive tools for exploring personal finance decisions. Newest first.</p>
+    </header>
+
+    <a class="card" href="resp-calculator/">
+      <h2>RESP Calculator — Ontario, Canada</h2>
+      <p>Model RESP contributions, CESG grants, and growth for education savings.</p>
+      <time datetime="2026-06-30">Created June 30, 2026</time>
+    </a>
+
+    <a class="card" href="car-loan-savings/">
+      <h2>Car Loan Payoff Comparison</h2>
+      <p>Compare car loan payoff strategies and what early repayment really saves.</p>
+      <time datetime="2026-06-28">Created June 28, 2026</time>
+    </a>
+    <div class="extra" style="margin: -0.5rem 0 1rem 1.5rem;">
+      Related: <a href="car-loan-savings/opportunity.html">Opportunity Cost Analysis</a>
+    </div>
+
+    <footer>
+      <a href="https://github.com/peterk7/personal-finance-calculators">View source on GitHub</a>
+    </footer>
+  </main>
+</body>
+
+</html>
