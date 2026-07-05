@@ -1,0 +1,252 @@
+/* ═══════════════════════════════════════════════════════════════
+   THE FINANCE LAB — shared theme
+   Load this AFTER a page's own stylesheet:
+     <link rel="stylesheet" href="style.css">
+     <link rel="stylesheet" href="../assets/lab-theme.css">
+   Part 1 defines the lab tokens + shared components (lab-*).
+   Part 2 re-skins the calculator pages by overriding the tokens
+   and the few hardcoded colors their stylesheets use.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Part 1 · Tokens ─────────────────────────────────────────── */
+
+:root {
+  /* lab palette */
+  --lab-bg: #0a1120;
+  --lab-panel: #121b2e;
+  --lab-panel-glass: rgba(17, 27, 46, 0.72);
+  --lab-text: #e6edf7;
+  --lab-muted: #8b9bb4;
+  --lab-teal: #2dd4bf;
+  --lab-teal-bright: #5eead4;
+  --lab-teal-glow: rgba(45, 212, 191, 0.35);
+  --lab-border: rgba(139, 155, 180, 0.22);
+  --lab-mono: "Cascadia Code", Consolas, "JetBrains Mono", Menlo, monospace;
+
+  /* override the calculator pages' own tokens (their style.css
+     defines these first; this file loads later and wins) */
+  --bg: var(--lab-bg);
+  --surface: var(--lab-panel);
+  --text: var(--lab-text);
+  --text-muted: var(--lab-muted);
+  --border: #253349;
+  --accent: var(--lab-teal);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --radius: 6px;
+
+  /* semantic colors, brightened for the dark ground */
+  --standard: #94a3b8;
+  --standard-bg: rgba(148, 163, 184, 0.14);
+  --actual: #34d399;
+  --actual-bg: rgba(52, 211, 153, 0.12);
+  --higher-dp: #60a5fa;
+  --higher-dp-bg: rgba(96, 165, 250, 0.12);
+  --shorter: #a78bfa;
+  --shorter-bg: rgba(167, 139, 250, 0.12);
+  --blue: #60a5fa;
+  --blue-bg: rgba(96, 165, 250, 0.12);
+  --green: #34d399;
+  --green-bg: rgba(52, 211, 153, 0.12);
+  --purple: #a78bfa;
+  --purple-bg: rgba(167, 139, 250, 0.12);
+  --amber: #fbbf24;
+  --amber-bg: rgba(251, 191, 36, 0.12);
+}
+
+/* the lab bench: blueprint grid + teal glow, on every page */
+body {
+  background:
+    linear-gradient(rgba(94, 234, 212, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.09) 1px, transparent 1px),
+    linear-gradient(rgba(94, 234, 212, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.05) 1px, transparent 1px),
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(45, 212, 191, 0.10), transparent 60%),
+    var(--lab-bg);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px, 100% 100%, 100% 100%;
+  background-attachment: fixed;
+  color: var(--lab-text);
+}
+
+input[type="range"] { accent-color: var(--lab-teal); }
+
+/* ── Part 1b · Shared lab components (used by the index page,
+      available to any page that wants them) ─────────────────── */
+
+.lab-topbar {
+  font-family: var(--lab-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--lab-border);
+  background: rgba(10, 17, 32, 0.8);
+}
+
+.lab-topbar a {
+  color: var(--lab-teal-bright);
+  text-decoration: none;
+}
+
+.lab-topbar a:hover { color: var(--lab-teal); }
+
+.lab-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  border: 1px solid var(--lab-border);
+  border-radius: 999px;
+  padding: 0.3em 0.9em;
+  font-family: var(--lab-mono);
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+.lab-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lab-teal);
+  box-shadow: 0 0 8px var(--lab-teal-glow), 0 0 2px var(--lab-teal);
+  animation: lab-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes lab-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.lab-label {
+  font-family: var(--lab-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.22em;
+  color: var(--lab-muted);
+}
+
+/* experiment / instrument panel with viewfinder corner ticks */
+.lab-panel {
+  position: relative;
+  display: block;
+  background: var(--lab-panel-glass);
+  border: 1px solid var(--lab-border);
+  border-radius: 6px;
+  text-decoration: none;
+  color: inherit;
+  backdrop-filter: blur(4px);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.lab-panel::before,
+.lab-panel::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--lab-teal);
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+
+.lab-panel::before {
+  top: -1px;
+  left: -1px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.lab-panel::after {
+  bottom: -1px;
+  right: -1px;
+  border-left: none;
+  border-top: none;
+}
+
+a.lab-panel:hover,
+a.lab-panel:focus-visible {
+  border-color: var(--lab-teal);
+  box-shadow: 0 0 28px rgba(45, 212, 191, 0.12), inset 0 0 20px rgba(45, 212, 191, 0.04);
+  transform: translateY(-2px);
+  outline: none;
+}
+
+a.lab-panel:hover::before,
+a.lab-panel:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-dot { animation: none; }
+  .lab-panel { transition: none; }
+}
+
+/* ── Part 2 · Re-skin the calculator pages ───────────────────
+   Overrides for the handful of hardcoded (non-token) colors in
+   car-loan-savings/style.css and resp-calculator/style.css.  */
+
+/* nav bar (car-loan pages) */
+.nav {
+  background: rgba(10, 17, 32, 0.8);
+  border-bottom: 1px solid var(--lab-border);
+}
+
+a.nav__brand {
+  text-decoration: none;
+  color: var(--lab-teal-bright);
+  letter-spacing: 0.12em;
+}
+
+a.nav__brand:hover { color: var(--lab-teal); }
+
+/* page headers: drop the light-theme gradient, let the grid show */
+header {
+  background: transparent;
+}
+
+.loan-meta strong,
+.rules-meta strong {
+  color: var(--lab-teal-bright);
+}
+
+/* savings ribbons: brighter text for dark tinted backgrounds */
+.card--actual .card__savings,
+.card--strategy-a .card__savings { color: #6ee7b7; }
+.card--higher-dp .card__savings,
+.card--strategy-c .card__savings { color: #93c5fd; }
+.card--shorter .card__savings { color: #c4b5fd; }
+.card--strategy-b .card__badge { background: var(--amber-bg); color: var(--amber); }
+.card--strategy-b .card__savings { background: var(--amber-bg); color: #fcd34d; }
+
+/* active selector buttons: teal needs dark text for contrast */
+.compare-btn--active,
+.rate-btn--active,
+.compare-btn--active:hover,
+.rate-btn--active:hover {
+  color: #08131f;
+}
+
+/* RESP page details */
+.strategy-card__delta--positive {
+  background: var(--green-bg);
+  color: #6ee7b7;
+}
+
+.recommendation .highlight { color: var(--green); }
+
+.breakdown-table tbody tr:hover {
+  background: rgba(94, 234, 212, 0.05);
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  background: var(--lab-teal);
+  border-color: var(--lab-bg);
+}
+
+.slider-row input[type="range"]::-moz-range-thumb {
+  background: var(--lab-teal);
+  border-color: var(--lab-bg);
+}
+
+/* footers */
+footer {
+  background: transparent;
+  border-top: 1px solid var(--lab-border);
+}
