@@ -1,0 +1,447 @@
+{
+  "loan": {
+    "contractDate": "2022-12-19",
+    "term": 60,
+    "apr": 4.99,
+    "scheduledPayment": 730.93,
+    "amountFinanced": 38736.69,
+    "originalFinanceCharge": 5119.11,
+    "noteAmount": 43855.80,
+    "vehicle": {}
+  },
+  "payments": [
+    {
+      "date": "2022-12-19",
+      "principalBalance": 38736.69,
+      "paymentAmount": 38736.69,
+      "principalAdjustment": 38736.69,
+      "interestAdjustment": 0.00,
+      "interestBalance": 0.00,
+      "interestCalculated": 0.00,
+      "type": "origination"
+    },
+    {
+      "date": "2023-01-19",
+      "principalBalance": 38170.06,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 566.63,
+      "interestAdjustment": 164.30,
+      "interestBalance": 0.00,
+      "interestCalculated": 164.30,
+      "type": "regular"
+    },
+    {
+      "date": "2023-02-21",
+      "principalBalance": 37611.39,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 558.67,
+      "interestAdjustment": 172.26,
+      "interestBalance": 0.00,
+      "interestCalculated": 172.26,
+      "type": "regular"
+    },
+    {
+      "date": "2023-03-20",
+      "principalBalance": 37019.24,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 592.15,
+      "interestAdjustment": 138.78,
+      "interestBalance": 0.00,
+      "interestCalculated": 138.78,
+      "type": "regular"
+    },
+    {
+      "date": "2023-04-19",
+      "principalBalance": 36440.11,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 579.13,
+      "interestAdjustment": 151.80,
+      "interestBalance": 0.00,
+      "interestCalculated": 151.80,
+      "type": "regular"
+    },
+    {
+      "date": "2023-05-19",
+      "principalBalance": 35858.58,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 581.53,
+      "interestAdjustment": 149.40,
+      "interestBalance": 0.00,
+      "interestCalculated": 149.40,
+      "type": "regular"
+    },
+    {
+      "date": "2023-06-19",
+      "principalBalance": 35279.55,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 579.03,
+      "interestAdjustment": 151.90,
+      "interestBalance": 0.00,
+      "interestCalculated": 151.90,
+      "type": "regular"
+    },
+    {
+      "date": "2023-07-19",
+      "principalBalance": 34693.22,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 586.33,
+      "interestAdjustment": 144.60,
+      "interestBalance": 0.00,
+      "interestCalculated": 144.60,
+      "type": "regular"
+    },
+    {
+      "date": "2023-07-27",
+      "principalBalance": 33693.22,
+      "paymentAmount": 1000.00,
+      "principalAdjustment": 1000.00,
+      "interestAdjustment": 0.00,
+      "interestBalance": 37.92,
+      "interestCalculated": 37.92,
+      "type": "lump_sum"
+    },
+    {
+      "date": "2023-08-21",
+      "principalBalance": 33115.46,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 577.76,
+      "interestAdjustment": 153.17,
+      "interestBalance": 0.00,
+      "interestCalculated": 115.25,
+      "type": "regular"
+    },
+    {
+      "date": "2023-09-19",
+      "principalBalance": 32515.90,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 599.56,
+      "interestAdjustment": 131.37,
+      "interestBalance": 0.00,
+      "interestCalculated": 131.37,
+      "type": "regular"
+    },
+    {
+      "date": "2023-10-19",
+      "principalBalance": 31918.47,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 597.43,
+      "interestAdjustment": 133.50,
+      "interestBalance": 0.00,
+      "interestCalculated": 133.50,
+      "type": "regular"
+    },
+    {
+      "date": "2023-11-19",
+      "principalBalance": 31322.70,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 595.77,
+      "interestAdjustment": 135.16,
+      "interestBalance": 0.00,
+      "interestCalculated": 135.16,
+      "type": "regular"
+    },
+    {
+      "date": "2023-11-21",
+      "principalBalance": 27322.70,
+      "paymentAmount": 4000.00,
+      "principalAdjustment": 4000.00,
+      "interestAdjustment": 0.00,
+      "interestBalance": 8.56,
+      "interestCalculated": 8.56,
+      "type": "lump_sum"
+    },
+    {
+      "date": "2023-12-19",
+      "principalBalance": 26705.05,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 617.65,
+      "interestAdjustment": 113.28,
+      "interestBalance": 0.00,
+      "interestCalculated": 104.72,
+      "type": "regular"
+    },
+    {
+      "date": "2024-01-19",
+      "principalBalance": 26087.09,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 617.96,
+      "interestAdjustment": 112.97,
+      "interestBalance": 0.00,
+      "interestCalculated": 112.97,
+      "type": "regular"
+    },
+    {
+      "date": "2024-02-19",
+      "principalBalance": 25466.52,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 620.57,
+      "interestAdjustment": 110.36,
+      "interestBalance": 0.00,
+      "interestCalculated": 110.36,
+      "type": "regular"
+    },
+    {
+      "date": "2024-03-19",
+      "principalBalance": 24836.22,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 630.30,
+      "interestAdjustment": 100.63,
+      "interestBalance": 0.00,
+      "interestCalculated": 100.63,
+      "type": "regular"
+    },
+    {
+      "date": "2024-04-19",
+      "principalBalance": 24210.38,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 625.84,
+      "interestAdjustment": 105.09,
+      "interestBalance": 0.00,
+      "interestCalculated": 105.09,
+      "type": "regular"
+    },
+    {
+      "date": "2024-05-19",
+      "principalBalance": 23578.45,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 631.93,
+      "interestAdjustment": 99.00,
+      "interestBalance": 0.00,
+      "interestCalculated": 99.00,
+      "type": "regular"
+    },
+    {
+      "date": "2024-06-19",
+      "principalBalance": 22947.03,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 631.42,
+      "interestAdjustment": 99.51,
+      "interestBalance": 0.00,
+      "interestCalculated": 99.51,
+      "type": "regular"
+    },
+    {
+      "date": "2024-07-19",
+      "principalBalance": 22310.00,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 637.03,
+      "interestAdjustment": 93.90,
+      "interestBalance": 0.00,
+      "interestCalculated": 93.90,
+      "type": "regular"
+    },
+    {
+      "date": "2024-08-19",
+      "principalBalance": 21673.31,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 636.69,
+      "interestAdjustment": 94.24,
+      "interestBalance": 0.00,
+      "interestCalculated": 94.24,
+      "type": "regular"
+    },
+    {
+      "date": "2024-09-19",
+      "principalBalance": 21033.83,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 639.48,
+      "interestAdjustment": 91.45,
+      "interestBalance": 0.00,
+      "interestCalculated": 91.45,
+      "type": "regular"
+    },
+    {
+      "date": "2024-10-16",
+      "principalBalance": 11111.32,
+      "paymentAmount": 10000.00,
+      "principalAdjustment": 9922.51,
+      "interestAdjustment": 77.49,
+      "interestBalance": 0.00,
+      "interestCalculated": 77.49,
+      "type": "lump_sum"
+    },
+    {
+      "date": "2024-10-19",
+      "principalBalance": 10380.39,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 730.93,
+      "interestAdjustment": 0.00,
+      "interestBalance": 4.53,
+      "interestCalculated": 4.53,
+      "type": "regular"
+    },
+    {
+      "date": "2024-11-19",
+      "principalBalance": 9698.01,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 682.38,
+      "interestAdjustment": 48.55,
+      "interestBalance": 0.00,
+      "interestCalculated": 44.02,
+      "type": "regular"
+    },
+    {
+      "date": "2024-12-19",
+      "principalBalance": 9006.68,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 691.33,
+      "interestAdjustment": 39.60,
+      "interestBalance": 0.00,
+      "interestCalculated": 39.60,
+      "type": "regular"
+    },
+    {
+      "date": "2025-01-19",
+      "principalBalance": 8313.88,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 692.80,
+      "interestAdjustment": 38.13,
+      "interestBalance": 0.00,
+      "interestCalculated": 38.13,
+      "type": "regular"
+    },
+    {
+      "date": "2025-02-19",
+      "principalBalance": 7618.29,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 695.59,
+      "interestAdjustment": 35.34,
+      "interestBalance": 0.00,
+      "interestCalculated": 35.34,
+      "type": "regular"
+    },
+    {
+      "date": "2025-03-19",
+      "principalBalance": 6916.48,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 701.81,
+      "interestAdjustment": 29.12,
+      "interestBalance": 0.00,
+      "interestCalculated": 29.12,
+      "type": "regular"
+    },
+    {
+      "date": "2025-04-19",
+      "principalBalance": 6215.00,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 701.48,
+      "interestAdjustment": 29.45,
+      "interestBalance": 0.00,
+      "interestCalculated": 29.45,
+      "type": "regular"
+    },
+    {
+      "date": "2025-05-19",
+      "principalBalance": 5509.57,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 705.43,
+      "interestAdjustment": 25.50,
+      "interestBalance": 0.00,
+      "interestCalculated": 25.50,
+      "type": "regular"
+    },
+    {
+      "date": "2025-06-19",
+      "principalBalance": 4801.89,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 707.68,
+      "interestAdjustment": 23.25,
+      "interestBalance": 0.00,
+      "interestCalculated": 23.25,
+      "type": "regular"
+    },
+    {
+      "date": "2025-07-19",
+      "principalBalance": 4090.76,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 711.13,
+      "interestAdjustment": 19.80,
+      "interestBalance": 0.00,
+      "interestCalculated": 19.80,
+      "type": "regular"
+    },
+    {
+      "date": "2025-08-19",
+      "principalBalance": 3377.19,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 713.57,
+      "interestAdjustment": 17.36,
+      "interestBalance": 0.00,
+      "interestCalculated": 17.36,
+      "type": "regular"
+    },
+    {
+      "date": "2025-09-19",
+      "principalBalance": 2660.52,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 716.67,
+      "interestAdjustment": 14.26,
+      "interestBalance": 0.00,
+      "interestCalculated": 14.26,
+      "type": "regular"
+    },
+    {
+      "date": "2025-10-19",
+      "principalBalance": 1940.39,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 720.13,
+      "interestAdjustment": 10.80,
+      "interestBalance": 0.00,
+      "interestCalculated": 10.80,
+      "type": "regular"
+    }
+  ],
+  "finalPayments": [
+    {
+      "date": "2025-11-19",
+      "principalBalance": 1217.68,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 722.71,
+      "interestAdjustment": 8.22,
+      "interestBalance": 0.00,
+      "interestCalculated": 8.22,
+      "daysFromLastPayment": 31,
+      "type": "regular",
+      "note": "Calculated using daily interest (4.99% APR / 365)"
+    },
+    {
+      "date": "2025-12-19",
+      "principalBalance": 491.74,
+      "paymentAmount": 730.93,
+      "principalAdjustment": 725.94,
+      "interestAdjustment": 4.99,
+      "interestBalance": 0.00,
+      "interestCalculated": 4.99,
+      "daysFromLastPayment": 30,
+      "type": "regular",
+      "note": "Calculated using daily interest (4.99% APR / 365)"
+    },
+    {
+      "date": "2026-01-20",
+      "principalBalance": 0.00,
+      "paymentAmount": 494.94,
+      "principalAdjustment": 491.74,
+      "interestAdjustment": 3.20,
+      "interestBalance": 0.00,
+      "interestCalculated": 3.20,
+      "daysFromLastPayment": 32,
+      "type": "payoff",
+      "note": "Final payoff payment. Interest derived from actual payment amount ($494.94 - $491.74 balance)."
+    }
+  ],
+  "summary": {
+    "totalPayments": 40,
+    "regularPayments": 37,
+    "lumpSumPayments": 3,
+    "totalLumpSumAmount": 15000.00,
+    "loanStartDate": "2022-12-19",
+    "loanEndDate": "2026-01-20",
+    "originalTermMonths": 60,
+    "actualTermMonths": 37,
+    "monthsSaved": 23,
+    "totalAmountPaid": 41808.42,
+    "totalInterestPaid": 3071.73,
+    "originalFinanceCharge": 5119.11,
+    "interestSaved": 2047.38
+  }
+}

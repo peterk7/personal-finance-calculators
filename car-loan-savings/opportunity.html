@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opportunity Cost Analysis</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.1.0/dist/chartjs-plugin-annotation.min.js"></script>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav__inner">
+      <span class="nav__brand">Loan Analysis</span>
+      <div class="nav__links">
+        <a href="index.html" class="nav__link">Payment Comparison</a>
+        <a href="opportunity.html" class="nav__link nav__link--active">Opportunity Cost</a>
+      </div>
+    </div>
+  </nav>
+
+  <header>
+    <div class="container">
+      <h1>Opportunity Cost Analysis</h1>
+      <p class="subtitle">Same $15K, same timing &mdash; pay down the loan or invest in the market?</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="rate-selector">
+      <span class="rate-selector__label">Assumed annual return:</span>
+      <div class="rate-selector__buttons" id="rateButtons">
+        <button class="rate-btn" data-rate="5">5%</button>
+        <button class="rate-btn" data-rate="6">6%</button>
+        <button class="rate-btn rate-btn--active" data-rate="8">8%</button>
+        <button class="rate-btn" data-rate="10">10%</button>
+        <button class="rate-btn" data-rate="12">12%</button>
+      </div>
+      <span class="rate-selector__hint" id="rateHint">Average market return</span>
+    </section>
+
+    <section class="context-card" id="downPaymentContext"></section>
+
+    <section class="cards" id="strategyCards"></section>
+
+    <section class="chart-section">
+      <h2>Portfolio Value Over Time</h2>
+      <div class="chart-container">
+        <canvas id="portfolioChart"></canvas>
+      </div>
+    </section>
+
+    <section class="chart-section">
+      <h2>Net Benefit Across All Return Rates</h2>
+      <div class="chart-container chart-container--short">
+        <canvas id="sensitivityChart"></canvas>
+      </div>
+    </section>
+
+    <section class="verdict" id="verdict"></section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Data sourced from lender P&amp;I statement (Oct 2025) and actual payment records. Investment returns are hypothetical and assume consistent monthly compounding.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="opportunity.js"></script>
+</body>
+</html>

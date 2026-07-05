@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RESP Calculator — Ontario, Canada</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <h1>RESP Calculator</h1>
+      <p class="subtitle">Maximize your child's education savings in Canada</p>
+      <div class="rules-meta">
+        <span>Lifetime Limit: <strong>$50,000</strong></span>
+        <span>CESG Match: <strong>20%</strong></span>
+        <span>Max CESG: <strong>$7,200</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <section class="controls">
+      <div class="control-row">
+        <div class="control-group">
+          <label for="childAge">Child's Current Age</label>
+          <select id="childAge"></select>
+        </div>
+        <div class="control-group control-group--grow">
+          <label for="annualContribution">Annual Contribution</label>
+          <div class="slider-row">
+            <input type="range" id="annualContributionSlider" min="0" max="16000" step="100" value="2500">
+            <span class="input-currency">$<input type="number" id="annualContribution" value="2500" min="0" max="50000" step="100"></span>
+          </div>
+        </div>
+        <div class="control-group control-group--grow">
+          <label for="returnRate">Expected Annual Return</label>
+          <div class="slider-row">
+            <input type="range" id="returnRateSlider" min="0" max="15" step="0.5" value="8">
+            <span class="slider-value" id="returnRateDisplay">8.0%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="strategy-comparison">
+      <div class="strategy-card strategy-card--user">
+        <div class="strategy-card__header">
+          <span class="strategy-card__badge">Your Plan</span>
+          <span class="strategy-card__contribution" id="userPlanLabel">$2,500/yr</span>
+        </div>
+        <div class="strategy-card__stats">
+          <div class="stat-row">
+            <span class="stat-label">Total Contributions</span>
+            <span class="stat-value" id="userContributions">$0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">CESG Grants</span>
+            <span class="stat-value stat-value--green" id="userCESG">$0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Investment Growth</span>
+            <span class="stat-value stat-value--purple" id="userGrowth">$0</span>
+          </div>
+          <div class="stat-row stat-row--total">
+            <span class="stat-label">Total at 18</span>
+            <span class="stat-value stat-value--big" id="userTotal">$0</span>
+          </div>
+        </div>
+        <div class="strategy-card__cesg-note" id="userCESGNote"></div>
+      </div>
+
+      <div class="strategy-card strategy-card--optimal">
+        <div class="strategy-card__header">
+          <span class="strategy-card__badge">Optimal Plan</span>
+          <span class="strategy-card__contribution" id="optimalPlanLabel"></span>
+        </div>
+        <div class="strategy-card__stats">
+          <div class="stat-row">
+            <span class="stat-label">Total Contributions</span>
+            <span class="stat-value" id="optimalContributions">$0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">CESG Grants</span>
+            <span class="stat-value stat-value--green" id="optimalCESG">$0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Investment Growth</span>
+            <span class="stat-value stat-value--purple" id="optimalGrowth">$0</span>
+          </div>
+          <div class="stat-row stat-row--total">
+            <span class="stat-label">Total at 18</span>
+            <span class="stat-value stat-value--big" id="optimalTotal">$0</span>
+          </div>
+        </div>
+        <div class="strategy-card__delta" id="optimalDelta"></div>
+      </div>
+    </section>
+
+    <section class="recommendation" id="recommendation"></section>
+
+    <section class="chart-section">
+      <h2>Balance Growth Over Time</h2>
+      <div class="chart-container">
+        <canvas id="growthChart"></canvas>
+      </div>
+    </section>
+
+    <section class="chart-section">
+      <h2>Balance Composition at Age 18</h2>
+      <div class="chart-container chart-container--short">
+        <canvas id="compositionChart"></canvas>
+      </div>
+    </section>
+
+    <section class="breakdown-section">
+      <h2>Year-by-Year Breakdown</h2>
+      <div class="table-tabs">
+        <button class="table-tab table-tab--active" data-tab="user">Your Plan</button>
+        <button class="table-tab" data-tab="optimal">Optimal Plan</button>
+      </div>
+      <div class="table-scroll">
+        <table class="breakdown-table" id="breakdownTable">
+          <thead>
+            <tr>
+              <th>Age</th>
+              <th>Contribution</th>
+              <th>CESG</th>
+              <th class="hide-mobile">CESG Room</th>
+              <th>Growth</th>
+              <th>Balance</th>
+            </tr>
+          </thead>
+          <tbody id="breakdownBody"></tbody>
+          <tfoot id="breakdownFoot"></tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section class="rules-section">
+      <h2>RESP & CESG Rules Reference</h2>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <div class="rule-card__title">Lifetime Limit</div>
+          <div class="rule-card__value">$50,000</div>
+          <p>Maximum total contributions per beneficiary. No annual contribution limit, but exceeding the lifetime cap incurs penalties.</p>
+        </div>
+        <div class="rule-card">
+          <div class="rule-card__title">CESG Match</div>
+          <div class="rule-card__value">20%</div>
+          <p>The government matches 20% of the first $2,500 contributed each year — that's $500/year in free money.</p>
+        </div>
+        <div class="rule-card">
+          <div class="rule-card__title">CESG Lifetime Cap</div>
+          <div class="rule-card__value">$7,200</div>
+          <p>Maximum total CESG a beneficiary can receive. At $500/year, this is reached in about 14.4 years.</p>
+        </div>
+        <div class="rule-card">
+          <div class="rule-card__title">Catch-Up Rule</div>
+          <div class="rule-card__value">$5,000/yr</div>
+          <p>If you missed years, contribute up to $5,000/year to claim up to $1,000 CESG/year on accumulated unused room.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>For educational purposes only. This calculator uses simplified assumptions. Consult a financial advisor for personalized advice. CESG eligibility requires a valid SIN and the beneficiary must be under 18.</p>
+    </div>
+  </footer>
+
+  <script src="calculator.js"></script>
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RRSP Leverage — Two Worlds Compared</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0B0E14; --panel:#141923; --panel2:#1B2230;
+    --border:#252D3A; --border-soft:#1E2530;
+    --text:#E6EBF2; --muted:#8A94A6; --faint:#59636F;
+    --w1:#4ADE9E; --w2:#6B8AC4; --gain:#F4B860; --danger:#E06C6C;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);
+    font-family:"Inter",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:"JetBrains Mono",monospace;font-variant-numeric:tabular-nums}
+  .wrap{max-width:1140px;margin:0 auto;padding:34px 26px 70px}
+
+  /* header */
+  header{border-bottom:1px solid var(--border);padding-bottom:22px;margin-bottom:26px}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.32em;
+    text-transform:uppercase;color:var(--gain);margin:0 0 12px}
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:28px;line-height:1.15;
+    margin:0 0 10px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:14px;max-width:720px;line-height:1.6;margin:0}
+  .sub b{color:var(--w1);font-weight:600}
+  .sub i{color:var(--w2);font-style:normal;font-weight:600}
+
+  /* layout */
+  .grid{display:grid;grid-template-columns:290px 1fr;gap:22px;align-items:start}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .main-col{display:flex;flex-direction:column;gap:22px}
+
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px}
+  .card-h{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--muted);padding:16px 20px 0}
+  .card-h.w1-h{color:var(--w1)} .card-h.w2-h{color:var(--w2)} .card-h.cmp-h{color:var(--gain)}
+
+  /* controls */
+  .sticky{position:sticky;top:22px}
+  .controls{padding:6px 18px 18px}
+  .group{padding:14px 0;border-bottom:1px solid var(--border-soft)}
+  .group:last-child{border-bottom:none;padding-bottom:4px}
+  .group-label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+  .ctrl{margin-bottom:15px} .ctrl:last-child{margin-bottom:2px}
+  .ctrl-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .ctrl-name{font-size:12.5px;color:var(--text)}
+  .ctrl-val{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;color:var(--w1)}
+  input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:3px;
+    background:var(--border);border-radius:3px;outline:none;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:15px;height:15px;border-radius:50%;background:var(--text);border:2px solid var(--bg);
+    box-shadow:0 0 0 1px var(--w1);cursor:pointer;transition:transform .1s}
+  input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.18)}
+  input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;
+    background:var(--text);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w1);cursor:pointer}
+
+  /* scenario body */
+  .scenario-body{padding:6px 20px 22px}
+
+  /* section header inside a scenario */
+  .sh{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--gain);padding:16px 0 8px;
+    border-top:1px solid var(--border-soft);margin-top:10px}
+  .sh:first-child{border-top:none;margin-top:0;padding-top:10px}
+
+  /* calculation line */
+  .cl{display:flex;align-items:baseline;gap:10px;padding:4px 0;font-size:13px}
+  .cl-l{flex:1.2;color:var(--muted);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cl-f{flex:1;text-align:right;font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--faint);min-width:0}
+  .cl-v{flex:0 0 100px;text-align:right;font-family:"JetBrains Mono",monospace;font-size:13.5px;font-weight:600}
+  @media(max-width:600px){.cl{flex-wrap:wrap}.cl-l{flex:1 0 100%}.cl-f{flex:1;text-align:left}.cl-v{flex:0 0 auto}}
+
+  /* note */
+  .cn{font-size:11.5px;color:var(--faint);padding:2px 0 4px;font-style:italic}
+
+  /* highlighted result */
+  .ch{display:flex;justify-content:space-between;align-items:baseline;
+    padding:10px 14px;margin:10px 0 4px;
+    background:rgba(244,184,96,.05);border:1px solid var(--border);border-radius:8px}
+  .ch-l{font-size:13px;color:var(--text);font-weight:500}
+  .ch-v{font-family:"JetBrains Mono",monospace;font-size:18px;font-weight:700}
+
+  /* value colors */
+  .pos{color:var(--w1)} .neg{color:var(--danger)} .hi{color:var(--gain)} .w2v{color:var(--w2)}
+
+  /* comparison */
+  .comp-head{display:flex;flex-wrap:wrap;gap:24px;align-items:flex-end;
+    padding:18px 20px 20px;
+    background:radial-gradient(120% 140% at 100% 0%,rgba(244,184,96,.07),transparent 60%),var(--panel)}
+  .comp-title{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .comp-big{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:38px;line-height:1}
+  .comp-pair{display:flex;gap:28px;flex-wrap:wrap}
+  .comp-item .comp-label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+  .comp-item .comp-val{font-family:"JetBrains Mono",monospace;font-size:20px;font-weight:600}
+
+  /* chart */
+  .chart-section{padding:14px 14px 10px}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;padding:2px 6px 14px}
+  .lg{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+  .swatch{width:18px;height:3px;border-radius:2px;flex:none}
+  .swatch.fill{height:11px;width:14px;border-radius:3px;opacity:.45}
+  svg{display:block;width:100%;height:auto;overflow:visible}
+  .axis-lbl{font-family:"JetBrains Mono",monospace;font-size:10px;fill:var(--faint)}
+  .gridline{stroke:var(--border-soft);stroke-width:1}
+  .hovergroup{pointer-events:none}
+
+  /* table */
+  .comp-tbl{width:100%;border-collapse:collapse;font-family:"JetBrains Mono",monospace;
+    font-size:12.5px;margin:0 0 8px}
+  .comp-tbl th{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+    text-align:right;padding:10px 12px;border-bottom:1px solid var(--border)}
+  .comp-tbl th:first-child{text-align:left}
+  .comp-tbl td{padding:8px 12px;text-align:right;border-bottom:1px solid var(--border-soft)}
+  .comp-tbl td:first-child{text-align:left;color:var(--muted)}
+  .comp-tbl tr:last-child td{border-bottom:none;font-weight:600}
+  .tbl-wrap{padding:0 20px 16px;overflow-x:auto}
+
+  .foot{color:var(--faint);font-size:11.5px;line-height:1.6;margin-top:24px;
+    font-family:"JetBrains Mono",monospace;max-width:820px}
+  .foot b{color:var(--muted);font-weight:500}
+
+  @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Borrow-to-contribute · two-world analysis</p>
+    <h1>RRSP Leverage vs. Investing the Same Cash</h1>
+    <p class="sub"><b>World 1</b> — borrow a lump sum in December, drop it into your RRSP, start repaying immediately, and use the tax refund (~4 months later) as a lump-sum paydown.<br>
+    <i>World 2</i> — skip the loan; invest the identical out-of-pocket dollars in a taxable account instead.<br>
+    Below you'll see every calculation, step by step, then a final comparison.</p>
+  </header>
+
+  <div class="grid">
+
+    <!-- ─── CONTROLS ─── -->
+    <div class="card sticky">
+      <div class="card-h">Parameters</div>
+      <div class="controls">
+
+        <div class="group">
+          <div class="group-label">The loan</div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span class="ctrl-name">Borrow amount</span><span class="ctrl-val mono" id="v_borrow">$50,000</span></div>
+            <input type="range" id="r_borrow" min="5000" max="100000" step="1000" value="50000">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span class="ctrl-name">HELOC rate</span><span class="ctrl-val mono" id="v_heloc">5.00%</span></div>
+            <input type="range" id="r_heloc" min="3" max="9" step="0.25" value="5">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span class="ctrl-name">Payoff period</span><span class="ctrl-val mono" id="v_payoff">5 yr</span></div>
+            <input type="range" id="r_payoff" min="1" max="10" step="1" value="5">
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-label">Tax rates</div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span class="ctrl-name">Marginal rate (now)</span><span class="ctrl-val mono" id="v_marg">53.53%</span></div>
+            <input type="range" id="r_marg" min="20" max="53.53" step="0.01" value="53.53">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span class="ctrl-name">Withdrawal rate (future)</span><span class="ctrl-val mono" id="v_wd">30%</span></div>
+            <input type="range" id="r_wd" min="15" max="53.53" step="0.5" value="30">
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-label">Growth</div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span class="ctrl-name">Annual return</span><span class="ctrl-val mono" id="v_growth">8.0%</span></div>
+            <input type="range" id="r_growth" min="3" max="12" step="0.5" value="8">
+          </div>
+          <div class="ctrl">
+            <div class="ctrl-top"><span class="ctrl-name">Projection horizon</span><span class="ctrl-val mono" id="v_hz">20 yr</span></div>
+            <input type="range" id="r_hz" min="5" max="35" step="1" value="20">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── MAIN CONTENT ─── -->
+    <div class="main-col">
+
+      <!-- SCENARIO 1 -->
+      <div class="card">
+        <div class="card-h w1-h">World 1 · RRSP Leverage</div>
+        <div class="scenario-body" id="w1"></div>
+      </div>
+
+      <!-- SCENARIO 2 -->
+      <div class="card">
+        <div class="card-h w2-h">World 2 · Taxable Investment (no loan)</div>
+        <div class="scenario-body" id="w2"></div>
+      </div>
+
+      <!-- COMPARISON -->
+      <div class="card" id="comp-card">
+        <div class="comp-head" id="comp-head"></div>
+        <div class="chart-section">
+          <div class="legend">
+            <div class="lg"><span class="swatch" style="background:var(--w1)"></span>World 1 · RRSP (after tax)</div>
+            <div class="lg"><span class="swatch" style="background:var(--w2)"></span>World 2 · taxable (after tax)</div>
+            <div class="lg"><span class="swatch fill" style="background:var(--gain)"></span>advantage</div>
+          </div>
+          <svg id="chart" viewBox="0 0 720 340" role="img"></svg>
+        </div>
+        <div class="tbl-wrap" id="comp-tbl"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <p class="foot">
+    <b>Model.</b> World 1: full contribution compounds tax-free from December; monthly payment (sized to amortize the post-refund residual over the payoff period) starts January; months 1–4 add extra interest on the refund portion of the balance; refund arrives at month 4 and clears that portion; base payment continues through month N (= payoff period); loan finishes exactly on schedule.
+    World 2: the identical out-of-pocket cash-flows (same monthly payment, same number of months) are invested in a taxable account at the same return rate; on liquidation, only capital gains are taxed at 50% inclusion × your withdrawal marginal rate.
+    Both shown after tax, fully liquidated, in nominal dollars. Not tax advice — pressure-test with your accountant.
+  </p>
+
+</div>
+
+<script>
+/* ──────────────────── helpers ──────────────────── */
+const $=id=>document.getElementById(id);
+const fmt0=n=>{const a=Math.round(Math.abs(n));return(n<0?'−':'')+'$'+a.toLocaleString()};
+const fmt2=n=>{const a=Math.abs(n);const s=a.toFixed(2).replace(/\B(?=(\d{3})+\.)/g,',');return(n<0?'−':'')+'$'+s};
+const fK=n=>'$'+Math.round(n/1000).toLocaleString()+'k';
+const fP=(v,d)=>(v*100).toFixed(d===undefined?2:d)+'%';
+
+function secH(t){return'<div class="sh">'+t+'</div>'}
+function row(l,f,v,cls){
+  return'<div class="cl"><div class="cl-l">'+l+'</div>'+
+    (f?'<div class="cl-f">'+f+'</div>':'')+
+    '<div class="cl-v '+(cls||'')+'">'+v+'</div></div>';
+}
+function note(t){return'<div class="cn">'+t+'</div>'}
+function hi(l,v,cls){
+  return'<div class="ch"><span class="ch-l">'+l+'</span><span class="ch-v '+(cls||'')+'">'+v+'</span></div>';
+}
+
+/* ──────────────────── model ──────────────────── */
+const STUB=4;        // months before tax refund (Dec → Apr)
+const CG_INCL=0.5;   // Canadian capital-gains inclusion rate
+
+function compute(p){
+  const mr=p.heloc/12;
+  const refund=p.borrow*p.marg;
+  const residual=Math.max(p.borrow-refund,0);
+
+  // payment sized to amortize the post-refund residual over the payoff period
+  const nPay=p.payoff*12;
+  const moPay=(mr>0&&residual>0)
+    ? residual*mr/(1-Math.pow(1+mr,-nPay))
+    : (nPay>0?residual/nPay:0);
+
+  // months 1-STUB: base PMT + interest on the refund portion of the balance
+  const extraInt=refund*mr;              // monthly interest on the un-refunded portion
+  const earlyPay=moPay+extraInt;         // total monthly payment months 1-STUB
+  const stubExtra=extraInt*STUB;         // total extra interest during waiting
+  const earlyTotal=earlyPay*STUB;        // sum of early payments
+  const normalTotal=moPay*(nPay-STUB);   // sum of months STUB+1 to nPay
+  const oop=earlyTotal+normalTotal;      // total out-of-pocket
+  const resInt=moPay*nPay-residual;      // interest baked into the 60-month amortization
+  const totInt=resInt+stubExtra;         // total loan interest
+
+  // monthly sim for World 2
+  const moRet=p.growth/12;
+  const totalMo=p.horizon*12;
+  let w2=0,w2c=0;
+  const yearly=[];
+
+  for(let m=0;m<=totalMo;m++){
+    if(m>=1&&m<=STUB){w2+=earlyPay;w2c+=earlyPay}
+    else if(m>STUB&&m<=nPay){w2+=moPay;w2c+=moPay}
+    w2*=(1+moRet);
+
+    if(m%12===0){
+      const yr=m/12;
+      const rGross=p.borrow*Math.pow(1+p.growth,yr);
+      const rAT=rGross*(1-p.wd);
+      const g2=Math.max(w2-w2c,0);
+      const t2=g2*CG_INCL*p.wd;
+      const a2=w2-t2;
+      yearly.push({yr,rGross,rAT,w2Bal:w2,w2C:w2c,w2G:g2,w2T:t2,w2AT:a2,adv:rAT-a2});
+    }
+  }
+
+  return{borrow:p.borrow,heloc:p.heloc,marg:p.marg,wd:p.wd,
+    growth:p.growth,payoff:p.payoff,horizon:p.horizon,
+    mr,refund,residual,nPay,moPay,
+    extraInt,earlyPay,stubExtra,earlyTotal,normalTotal,
+    oop,resInt,totInt,yearly};
+}
+
+/* ──────────────────── render: World 1 ──────────────────── */
+function renderW1(c){
+  const fin=c.yearly[c.horizon];
+  const h=[];
+
+  h.push(secH('Step 1 — The Loan'));
+  h.push(row('Borrow amount','',fmt0(c.borrow)));
+  h.push(row('HELOC annual rate','',fP(c.heloc)));
+  h.push(row('Monthly rate',fP(c.heloc)+' ÷ 12',fP(c.mr,4)));
+
+  h.push(secH('Step 2 — Base Monthly Payment'));
+  h.push(note('Sized to amortize the post-refund residual over '+c.payoff+' years'));
+  h.push(row('Anticipated tax refund',fmt0(c.borrow)+' × '+fP(c.marg),fmt0(c.refund),'pos'));
+  h.push(row('Residual after refund',fmt0(c.borrow)+' − '+fmt0(c.refund),fmt0(c.residual)));
+  h.push(row('Base payment','PMT('+fmt0(c.residual)+', '+fP(c.mr,3)+'/mo, '+c.nPay+')',fmt2(c.moPay)));
+
+  h.push(secH('Step 3 — Repayment Schedule'));
+  h.push(note('Repayment starts month 1. Until the refund arrives at month '+STUB+', each payment also covers interest on the refund portion of the balance.'));
+  h.push(row('Refund portion of balance','',fmt0(c.refund)));
+  h.push(row('Monthly interest on that portion',fmt0(c.refund)+' × '+fP(c.mr,4),fmt2(c.extraInt)));
+  h.push(row('Payment months 1–'+STUB+' (base + extra)',fmt2(c.moPay)+' + '+fmt2(c.extraInt),fmt2(c.earlyPay)));
+  h.push(row('Month '+STUB+': tax refund wipes the refund portion','',fmt0(c.refund)));
+  h.push(row('Payment months '+(STUB+1)+'–'+c.nPay+' (base only)','',fmt2(c.moPay)));
+  h.push(hi('Loan fully repaid at month '+c.nPay+' ('+c.payoff+' yr)','$0','pos'));
+
+  h.push(secH('Step 4 — Your Total Out-of-Pocket'));
+  h.push(row('Early payments (months 1–'+STUB+')',fmt2(c.earlyPay)+' × '+STUB,fmt0(c.earlyTotal)));
+  h.push(row('Regular payments (months '+(STUB+1)+'–'+c.nPay+')',fmt2(c.moPay)+' × '+(c.nPay-STUB),fmt0(c.normalTotal)));
+  h.push(hi('Total capital deployed from your pocket',fmt0(c.oop),'neg'));
+  h.push(row('Of which total interest',fmt0(c.resInt)+' + '+fmt0(c.stubExtra),fmt0(c.totInt),'neg'));
+  h.push(note('Residual amortization interest + extra interest during waiting period'));
+
+  h.push(secH('Step 5 — RRSP Growth ('+c.horizon+' yr at '+fP(c.growth,1)+')'));
+  h.push(row('Gross value at '+c.horizon+' yr',fmt0(c.borrow)+' × (1 + '+fP(c.growth,1)+')^'+c.horizon,fmt0(fin.rGross)));
+  h.push(row('Withdrawal tax rate','',fP(c.wd,0)));
+  h.push(row('Tax on withdrawal',fmt0(fin.rGross)+' × '+fP(c.wd,0),fmt0(fin.rGross*c.wd),'neg'));
+  h.push(hi('After-tax value',fmt0(fin.rAT),'pos'));
+  h.push(note(fmt0(fin.rGross)+' × (1 − '+fP(c.wd,0)+') = '+fmt0(fin.rAT)));
+
+  $('w1').innerHTML=h.join('');
+}
+
+/* ──────────────────── render: World 2 ──────────────────── */
+function renderW2(c){
+  const fin=c.yearly[c.horizon];
+  const effCG=CG_INCL*c.wd;
+  const h=[];
+
+  h.push(secH('Step 1 — Cash-Flow Schedule'));
+  h.push(note('Same dollars that leave your account in World 1, invested instead. No loan, no RRSP, no tax refund.'));
+  h.push(row('Months 1–'+STUB+' (matches early payment)',fmt2(c.earlyPay)+' /month',STUB+' payments'));
+  h.push(row('Months '+(STUB+1)+'–'+c.nPay+' (matches base payment)',fmt2(c.moPay)+' /month',(c.nPay-STUB)+' payments'));
+  h.push(hi('Total invested (= World 1 out-of-pocket)',fmt0(c.oop)));
+  h.push(note('Same '+fmt0(c.oop)+' of capital, same dates — just deployed differently'));
+
+  h.push(secH('Step 2 — Investment Growth ('+c.horizon+' yr at '+fP(c.growth,1)+')'));
+  h.push(row('Account balance at '+c.horizon+' yr','monthly compounding',fmt0(fin.w2Bal)));
+  h.push(row('Total contributions','',fmt0(fin.w2C)));
+  h.push(row('Capital gains',fmt0(fin.w2Bal)+' − '+fmt0(fin.w2C),fmt0(fin.w2G),'pos'));
+
+  h.push(secH('Step 3 — After-Tax Value'));
+  h.push(row('Capital gains inclusion rate','Canadian rule','50%'));
+  h.push(row('Your marginal rate at withdrawal','',fP(c.wd,0)));
+  h.push(row('Effective CG tax rate','50% × '+fP(c.wd,0),fP(effCG,1)));
+  h.push(row('Tax on gains',fmt0(fin.w2G)+' × '+fP(effCG,1),fmt0(fin.w2T),'neg'));
+  h.push(hi('After-tax value',fmt0(fin.w2AT),'w2v'));
+  h.push(note(fmt0(fin.w2Bal)+' − '+fmt0(fin.w2T)+' = '+fmt0(fin.w2AT)));
+
+  $('w2').innerHTML=h.join('');
+}
+
+/* ──────────────────── render: comparison ──────────────────── */
+function renderComp(c){
+  const fin=c.yearly[c.horizon];
+  const adv=fin.adv;
+  const cls=adv>=0?'pos':'neg';
+  const sign=adv>=0?'+':'';
+
+  // headline
+  let hd='<div style="flex:1 1 auto"><div class="comp-title">World 1 advantage at '+c.horizon+' years</div>'+
+    '<div class="comp-big '+cls+'">'+sign+fmt0(adv)+'</div></div>'+
+    '<div class="comp-pair">'+
+    '<div class="comp-item"><span class="comp-label">World 1</span><span class="comp-val pos">'+fmt0(fin.rAT)+'</span></div>'+
+    '<div class="comp-item"><span class="comp-label">World 2</span><span class="comp-val w2v">'+fmt0(fin.w2AT)+'</span></div>'+
+    '</div>';
+  $('comp-head').innerHTML=hd;
+
+  // table
+  const yrs=[];
+  for(let y=5;y<=c.horizon;y+=5)yrs.push(y);
+  if(yrs.length===0||yrs[yrs.length-1]!==c.horizon)yrs.push(c.horizon);
+
+  let tb='<table class="comp-tbl"><thead><tr><th>Year</th><th>World 1 (RRSP)</th><th>World 2 (Taxable)</th><th>Advantage</th></tr></thead><tbody>';
+  for(const y of yrs){
+    const d=c.yearly[y];
+    const ac=d.adv>=0?'pos':'neg';
+    const s=d.adv>=0?'+':'';
+    const last=y===c.horizon?' style="font-weight:700"':'';
+    tb+='<tr'+last+'><td>'+y+'</td><td class="pos">'+fmt0(d.rAT)+'</td><td class="w2v">'+fmt0(d.w2AT)+'</td><td class="'+ac+'">'+s+fmt0(d.adv)+'</td></tr>';
+  }
+  tb+='</tbody></table>';
+  $('comp-tbl').innerHTML=tb;
+}
+
+/* ──────────────────── chart ──────────────────── */
+const SVG="http://www.w3.org/2000/svg";
+const Mg={l:56,r:14,t:14,b:30},CW=720,CH=340;
+const PW=CW-Mg.l-Mg.r,PH=CH-Mg.t-Mg.b;
+let lastC=null;
+
+function drawChart(c){
+  lastC=c;
+  const s=c.yearly,H=c.horizon;
+  const maxY=Math.max(...s.map(d=>Math.max(d.rAT,d.w2AT)))*1.08||1;
+  const x=t=>Mg.l+(t/H)*PW;
+  const y=v=>Mg.t+PH-(v/maxY)*PH;
+  const cv=$('chart');cv.innerHTML='';
+
+  // y gridlines
+  const ticks=4;
+  for(let i=0;i<=ticks;i++){
+    const v=maxY*i/ticks,yy=y(v);
+    const ln=document.createElementNS(SVG,'line');
+    ln.setAttribute('x1',Mg.l);ln.setAttribute('x2',CW-Mg.r);
+    ln.setAttribute('y1',yy);ln.setAttribute('y2',yy);ln.setAttribute('class','gridline');cv.appendChild(ln);
+    const tx=document.createElementNS(SVG,'text');
+    tx.setAttribute('x',Mg.l-9);tx.setAttribute('y',yy+3);tx.setAttribute('text-anchor','end');
+    tx.setAttribute('class','axis-lbl');tx.textContent=fK(v);cv.appendChild(tx);
+  }
+
+  // x labels
+  const xt=[];for(let t=0;t<=H;t+=5)xt.push(t);
+  if(H-xt[xt.length-1]>=2)xt.push(H);else xt[xt.length-1]=H;
+  xt.forEach(t=>{
+    const tx=document.createElementNS(SVG,'text');
+    tx.setAttribute('x',x(t));tx.setAttribute('y',CH-9);tx.setAttribute('text-anchor','middle');
+    tx.setAttribute('class','axis-lbl');tx.textContent=t+'y';cv.appendChild(tx);
+  });
+
+  // gain area
+  let area='M'+x(0)+' '+y(s[0].rAT)+' ';
+  s.forEach(p=>area+='L'+x(p.yr).toFixed(1)+' '+y(p.rAT).toFixed(1)+' ');
+  for(let i=s.length-1;i>=0;i--)area+='L'+x(s[i].yr).toFixed(1)+' '+y(s[i].w2AT).toFixed(1)+' ';
+  area+='Z';
+  const ap=document.createElementNS(SVG,'path');
+  ap.setAttribute('d',area);ap.setAttribute('fill','var(--gain)');ap.setAttribute('opacity','0.12');cv.appendChild(ap);
+
+  // paths
+  const mkP=(key,col,w)=>{
+    let d='';s.forEach((p,i)=>{d+=(i?'L':'M')+x(p.yr).toFixed(1)+' '+y(p[key]).toFixed(1)+' '});
+    const el=document.createElementNS(SVG,'path');
+    el.setAttribute('d',d);el.setAttribute('fill','none');el.setAttribute('stroke',col);
+    el.setAttribute('stroke-width',w);el.setAttribute('stroke-linejoin','round');cv.appendChild(el);
+  };
+  mkP('w2AT','var(--w2)',2);
+  mkP('rAT','var(--w1)',2.4);
+
+  // endpoint dots
+  [['rAT','var(--w1)'],['w2AT','var(--w2)']].forEach(([k,col])=>{
+    const e=s[s.length-1],dot=document.createElementNS(SVG,'circle');
+    dot.setAttribute('cx',x(H));dot.setAttribute('cy',y(e[k]));dot.setAttribute('r',3.2);
+    dot.setAttribute('fill',col);cv.appendChild(dot);
+  });
+
+  // hover layer
+  const hg=document.createElementNS(SVG,'g');hg.setAttribute('class','hovergroup');hg.style.opacity='0';cv.appendChild(hg);
+  const vl=document.createElementNS(SVG,'line');
+  vl.setAttribute('y1',Mg.t);vl.setAttribute('y2',Mg.t+PH);
+  vl.setAttribute('stroke','var(--muted)');vl.setAttribute('stroke-width',1);hg.appendChild(vl);
+  const d1=mkDot(hg,'var(--w1)'),d2=mkDot(hg,'var(--w2)');
+  const box=document.createElementNS(SVG,'g');hg.appendChild(box);
+  const rect=document.createElementNS(SVG,'rect');
+  rect.setAttribute('width',140);rect.setAttribute('height',76);rect.setAttribute('rx',7);
+  rect.setAttribute('fill','#10151F');rect.setAttribute('stroke','var(--border)');box.appendChild(rect);
+  const ht0=mkTxt(box,12,18,'var(--text)',12,600);
+  const ht1=mkTxt(box,12,37,'var(--w1)',11.5,500);
+  const ht2=mkTxt(box,12,52,'var(--w2)',11.5,500);
+  const ht3=mkTxt(box,12,67,'var(--gain)',11.5,600);
+
+  const ov=document.createElementNS(SVG,'rect');
+  ov.setAttribute('x',Mg.l);ov.setAttribute('y',Mg.t);
+  ov.setAttribute('width',PW);ov.setAttribute('height',PH);
+  ov.setAttribute('fill','transparent');ov.style.cursor='crosshair';cv.appendChild(ov);
+
+  function move(ev){
+    const pt=cv.getBoundingClientRect();
+    const px=(ev.clientX-pt.left)/pt.width*CW;
+    let t=Math.round(((px-Mg.l)/PW)*H);t=Math.max(0,Math.min(H,t));
+    const p=s[t];hg.style.opacity='1';
+    vl.setAttribute('x1',x(t));vl.setAttribute('x2',x(t));
+    d1.setAttribute('cx',x(t));d1.setAttribute('cy',y(p.rAT));
+    d2.setAttribute('cx',x(t));d2.setAttribute('cy',y(p.w2AT));
+    ht0.textContent='Year '+t;
+    ht1.textContent='W1  '+fmt0(p.rAT);
+    ht2.textContent='W2  '+fmt0(p.w2AT);
+    ht3.textContent='Adv '+fmt0(p.adv);
+    let bx=x(t)+12;if(bx+140>CW-Mg.r)bx=x(t)-152;
+    box.setAttribute('transform','translate('+bx+','+(Mg.t+8)+')');
+  }
+  ov.addEventListener('mousemove',move);
+  ov.addEventListener('mouseleave',()=>hg.style.opacity='0');
+  ov.addEventListener('touchmove',e=>{if(e.touches[0]){move(e.touches[0]);e.preventDefault()}},{passive:false});
+}
+
+function mkDot(g,col){
+  const c=document.createElementNS(SVG,'circle');c.setAttribute('r',4);
+  c.setAttribute('fill',col);c.setAttribute('stroke','var(--bg)');c.setAttribute('stroke-width',1.5);
+  g.appendChild(c);return c;
+}
+function mkTxt(g,x,y,fill,sz,wt){
+  const t=document.createElementNS(SVG,'text');
+  t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('fill',fill);
+  t.setAttribute('font-family','JetBrains Mono,monospace');t.setAttribute('font-size',sz);
+  t.setAttribute('font-weight',wt);g.appendChild(t);return t;
+}
+
+/* ──────────────────── wiring ──────────────────── */
+const R={
+  borrow:$('r_borrow'),heloc:$('r_heloc'),payoff:$('r_payoff'),
+  marg:$('r_marg'),wd:$('r_wd'),growth:$('r_growth'),hz:$('r_hz')
+};
+
+function readP(){return{
+  borrow:+R.borrow.value,heloc:+R.heloc.value/100,marg:+R.marg.value/100,
+  wd:+R.wd.value/100,growth:+R.growth.value/100,payoff:+R.payoff.value,horizon:+R.hz.value
+}}
+
+function update(){
+  const p=readP(),c=compute(p);
+
+  // update control labels
+  $('v_borrow').textContent=fmt0(p.borrow);
+  $('v_heloc').textContent=fP(p.heloc);
+  $('v_payoff').textContent=p.payoff+' yr';
+  $('v_marg').textContent=fP(p.marg);
+  $('v_wd').textContent=fP(p.wd,0);
+  $('v_growth').textContent=fP(p.growth,1);
+  $('v_hz').textContent=p.horizon+' yr';
+
+  renderW1(c);
+  renderW2(c);
+  renderComp(c);
+  drawChart(c);
+}
+
+Object.values(R).forEach(el=>el.addEventListener('input',update));
+window.addEventListener('resize',()=>lastC&&drawChart(lastC));
+update();
+</script>
+</body>
+</html>
