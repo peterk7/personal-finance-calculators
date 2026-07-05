@@ -256,7 +256,9 @@ function update() {
   if (userResult.totalCESG < CESG_LIFETIME) {
     const missed = CESG_LIFETIME - userResult.totalCESG;
     cesgNote = `You're leaving <strong>${fmt(missed)}</strong> of free CESG on the table. `;
-    if (annualContrib < 5000 && startAge > 0) {
+    if (userResult.balance > optimalResult.balance + 100) {
+      cesgNote += `And yet your plan still ends <strong>ahead</strong> — at this return rate, deploying money sooner is worth more than the missed grants.`;
+    } else if (annualContrib < 5000 && startAge > 0) {
       cesgNote += `Contributing $5,000/yr would help catch up on unused grant room.`;
     } else if (annualContrib < 2500) {
       cesgNote += `Contributing at least $2,500/yr would earn the full $500/yr CESG.`;
@@ -277,9 +279,13 @@ function update() {
   if (delta > 100) {
     deltaEl.className = 'strategy-card__delta strategy-card__delta--positive';
     deltaEl.textContent = `+${fmt(delta)} more than your plan`;
+  } else if (delta < -100) {
+    deltaEl.className = 'strategy-card__delta strategy-card__delta--negative';
+    deltaEl.textContent =
+      `−${fmt(-delta)} less than your plan — the extra CESG doesn't beat your faster deployment at this return rate`;
   } else {
     deltaEl.className = 'strategy-card__delta strategy-card__delta--neutral';
-    deltaEl.textContent = 'Same as your plan — nothing more to extract.';
+    deltaEl.textContent = 'Effectively tied with your plan — nothing more to extract.';
   }
 
   $('lumpContributions').textContent = fmt(lumpResult.totalContributions);
@@ -295,8 +301,8 @@ function update() {
     lumpDeltaEl.className = 'strategy-card__delta strategy-card__delta--positive';
     lumpDeltaEl.textContent = `+${fmt(lumpDelta)} more than your plan`;
   } else if (lumpDelta < -100) {
-    lumpDeltaEl.className = 'strategy-card__delta strategy-card__delta--neutral';
-    lumpDeltaEl.textContent = `${fmt(Math.abs(lumpDelta))} less than your plan`;
+    lumpDeltaEl.className = 'strategy-card__delta strategy-card__delta--negative';
+    lumpDeltaEl.textContent = `−${fmt(Math.abs(lumpDelta))} less than your plan`;
   } else {
     lumpDeltaEl.className = 'strategy-card__delta strategy-card__delta--neutral';
     lumpDeltaEl.textContent = 'Effectively tied with your plan';

@@ -95,13 +95,26 @@ console.log('Optimal schedule behavior');
   }
   check('constrained optimal respects cash flow (age 5, $10k + $4k/yr)', !overspent);
 
-  // reshuffling the same money should never end lower than the flat plan
+  // NOTE: max-extraction is NOT universally better than the user's plan.
+  // Holding cash back for future grants costs compounding time; at high
+  // return rates the user's faster deployment wins. Both directions are
+  // legitimate outcomes and the UI must report whichever holds.
   const userSched = flatSchedule(5, 4000);
   userSched[0] += 10000;
   const userR = simulate(5, userSched, 0.06);
   const optR = simulate(5, computeOptimalSchedule(5, 10000, 4000), 0.06);
-  check('optimal ≥ user plan with same cash', optR.balance >= userR.balance - 0.01,
+  check('extraction ≥ flat plan at modest return (age 5, $10k + $4k/yr @ 6%)',
+    optR.balance >= userR.balance - 0.01,
     `opt ${Math.round(optR.balance)} vs user ${Math.round(userR.balance)}`);
+
+  // ...and the reverse at a high return: all-in year one beats extraction
+  const allIn = flatSchedule(0, 0);
+  allIn[0] += 50000;
+  const allInR = simulate(0, allIn, 0.08);
+  const extractR = simulate(0, computeOptimalSchedule(0, 50000, 0), 0.08);
+  check('user all-in beats extraction at 8% (newborn, $50k lump)',
+    allInR.balance > extractR.balance,
+    `user ${Math.round(allInR.balance)} vs extraction ${Math.round(extractR.balance)}`);
 }
 
 console.log('Lump vs match crossover');

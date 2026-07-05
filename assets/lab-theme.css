@@ -68,7 +68,9 @@ body {
   color: var(--lab-text);
 }
 
-input[type="range"] { accent-color: var(--lab-teal); }
+input[type="range"] {
+  accent-color: var(--lab-teal);
+}
 
 /* ── Part 1b · Shared lab components (used by the index page,
       available to any page that wants them) ─────────────────── */
@@ -87,7 +89,9 @@ input[type="range"] { accent-color: var(--lab-teal); }
   text-decoration: none;
 }
 
-.lab-topbar a:hover { color: var(--lab-teal); }
+.lab-topbar a:hover {
+  color: var(--lab-teal);
+}
 
 .lab-chip {
   display: inline-flex;
@@ -111,8 +115,15 @@ input[type="range"] { accent-color: var(--lab-teal); }
 }
 
 @keyframes lab-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.35;
+  }
 }
 
 .lab-label {
@@ -174,8 +185,13 @@ a.lab-panel:hover::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lab-dot { animation: none; }
-  .lab-panel { transition: none; }
+  .lab-dot {
+    animation: none;
+  }
+
+  .lab-panel {
+    transition: none;
+  }
 }
 
 /* ── Part 2 · Re-skin the calculator pages ───────────────────
@@ -194,7 +210,9 @@ a.nav__brand {
   letter-spacing: 0.12em;
 }
 
-a.nav__brand:hover { color: var(--lab-teal); }
+a.nav__brand:hover {
+  color: var(--lab-teal);
+}
 
 /* page headers: drop the light-theme gradient, let the grid show */
 header {
@@ -208,12 +226,28 @@ header {
 
 /* savings ribbons: brighter text for dark tinted backgrounds */
 .card--actual .card__savings,
-.card--strategy-a .card__savings { color: #6ee7b7; }
+.card--strategy-a .card__savings {
+  color: #6ee7b7;
+}
+
 .card--higher-dp .card__savings,
-.card--strategy-c .card__savings { color: #93c5fd; }
-.card--shorter .card__savings { color: #c4b5fd; }
-.card--strategy-b .card__badge { background: var(--amber-bg); color: var(--amber); }
-.card--strategy-b .card__savings { background: var(--amber-bg); color: #fcd34d; }
+.card--strategy-c .card__savings {
+  color: #93c5fd;
+}
+
+.card--shorter .card__savings {
+  color: #c4b5fd;
+}
+
+.card--strategy-b .card__badge {
+  background: var(--amber-bg);
+  color: var(--amber);
+}
+
+.card--strategy-b .card__savings {
+  background: var(--amber-bg);
+  color: #fcd34d;
+}
 
 /* active selector buttons: teal needs dark text for contrast */
 .compare-btn--active,
@@ -229,7 +263,14 @@ header {
   color: #6ee7b7;
 }
 
-.recommendation .highlight { color: var(--green); }
+.strategy-card__delta--negative {
+  background: rgba(248, 113, 113, 0.12);
+  color: #f87171;
+}
+
+.recommendation .highlight {
+  color: var(--green);
+}
 
 .breakdown-table tbody tr:hover {
   background: rgba(94, 234, 212, 0.05);
