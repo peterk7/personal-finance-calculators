@@ -60,6 +60,16 @@
   input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;
     background:var(--text);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--w1);cursor:pointer}
 
+  /* editable value field */
+  .valwrap{display:flex;align-items:center;gap:3px}
+  .valunit{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--faint)}
+  input.numf{width:78px;background:var(--panel2);border:1px solid var(--border);border-radius:6px;
+    padding:3px 6px;color:var(--w1);font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;
+    text-align:right;outline:none;transition:border-color .12s}
+  input.numf:focus{border-color:var(--w1)}
+  input.numf::-webkit-outer-spin-button,input.numf::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  input.numf{-moz-appearance:textfield}
+
   /* scenario body */
   .scenario-body{padding:6px 20px 22px}
 
@@ -146,49 +156,7 @@
     <!-- ─── CONTROLS ─── -->
     <div class="card sticky">
       <div class="card-h">Parameters</div>
-      <div class="controls">
-
-        <div class="group">
-          <div class="group-label">The loan</div>
-          <div class="ctrl">
-            <div class="ctrl-top"><span class="ctrl-name">Borrow amount</span><span class="ctrl-val mono" id="v_borrow">$50,000</span></div>
-            <input type="range" id="r_borrow" min="5000" max="100000" step="1000" value="50000">
-          </div>
-          <div class="ctrl">
-            <div class="ctrl-top"><span class="ctrl-name">HELOC rate</span><span class="ctrl-val mono" id="v_heloc">5.00%</span></div>
-            <input type="range" id="r_heloc" min="3" max="9" step="0.25" value="5">
-          </div>
-          <div class="ctrl">
-            <div class="ctrl-top"><span class="ctrl-name">Payoff period</span><span class="ctrl-val mono" id="v_payoff">5 yr</span></div>
-            <input type="range" id="r_payoff" min="1" max="10" step="1" value="5">
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="group-label">Tax rates</div>
-          <div class="ctrl">
-            <div class="ctrl-top"><span class="ctrl-name">Marginal rate (now)</span><span class="ctrl-val mono" id="v_marg">53.53%</span></div>
-            <input type="range" id="r_marg" min="20" max="53.53" step="0.01" value="53.53">
-          </div>
-          <div class="ctrl">
-            <div class="ctrl-top"><span class="ctrl-name">Withdrawal rate (future)</span><span class="ctrl-val mono" id="v_wd">30%</span></div>
-            <input type="range" id="r_wd" min="15" max="53.53" step="0.5" value="30">
-          </div>
-        </div>
-
-        <div class="group">
-          <div class="group-label">Growth</div>
-          <div class="ctrl">
-            <div class="ctrl-top"><span class="ctrl-name">Annual return</span><span class="ctrl-val mono" id="v_growth">8.0%</span></div>
-            <input type="range" id="r_growth" min="3" max="12" step="0.5" value="8">
-          </div>
-          <div class="ctrl">
-            <div class="ctrl-top"><span class="ctrl-name">Projection horizon</span><span class="ctrl-val mono" id="v_hz">20 yr</span></div>
-            <input type="range" id="r_hz" min="5" max="35" step="1" value="20">
-          </div>
-        </div>
-
-      </div>
+      <div class="controls" id="controls"></div>
     </div>
 
     <!-- ─── MAIN CONTENT ─── -->
@@ -238,6 +206,8 @@ const fmt0=n=>{const a=Math.round(Math.abs(n));return(n<0?'−':'')+'$'+a.toLoca
 const fmt2=n=>{const a=Math.abs(n);const s=a.toFixed(2).replace(/\B(?=(\d{3})+\.)/g,',');return(n<0?'−':'')+'$'+s};
 const fK=n=>'$'+Math.round(n/1000).toLocaleString()+'k';
 const fP=(v,d)=>(v*100).toFixed(d===undefined?2:d)+'%';
+const dur=mo=>{mo=Math.round(mo);const y=Math.floor(mo/12),m=mo%12;
+  return y&&m?y+' yr '+m+' mo':y?y+' yr':m+' mo'};
 
 function secH(t){return'<div class="sh">'+t+'</div>'}
 function row(l,f,v,cls){
@@ -298,7 +268,7 @@ function compute(p){
   }
 
   return{borrow:p.borrow,heloc:p.heloc,marg:p.marg,wd:p.wd,
-    growth:p.growth,payoff:p.payoff,horizon:p.horizon,
+    growth:p.growth,payoff:p.payoff,payoffMo:Math.round(p.payoff*12),horizon:p.horizon,
     mr,refund,residual,nPay,moPay,
     extraInt,earlyPay,stubExtra,earlyTotal,normalTotal,
     oop,resInt,totInt,yearly};
@@ -311,11 +281,11 @@ function renderW1(c){
 
   h.push(secH('Step 1 — The Loan'));
   h.push(row('Borrow amount','',fmt0(c.borrow)));
-  h.push(row('HELOC annual rate','',fP(c.heloc)));
+  h.push(row('Loan annual rate','',fP(c.heloc)));
   h.push(row('Monthly rate',fP(c.heloc)+' ÷ 12',fP(c.mr,4)));
 
   h.push(secH('Step 2 — Base Monthly Payment'));
-  h.push(note('Sized to amortize the post-refund residual over '+c.payoff+' years'));
+  h.push(note('Sized to amortize the post-refund residual over '+dur(c.payoffMo)));
   h.push(row('Anticipated tax refund',fmt0(c.borrow)+' × '+fP(c.marg),fmt0(c.refund),'pos'));
   h.push(row('Residual after refund',fmt0(c.borrow)+' − '+fmt0(c.refund),fmt0(c.residual)));
   h.push(row('Base payment','PMT('+fmt0(c.residual)+', '+fP(c.mr,3)+'/mo, '+c.nPay+')',fmt2(c.moPay)));
@@ -327,7 +297,7 @@ function renderW1(c){
   h.push(row('Payment months 1–'+STUB+' (base + extra)',fmt2(c.moPay)+' + '+fmt2(c.extraInt),fmt2(c.earlyPay)));
   h.push(row('Month '+STUB+': tax refund wipes the refund portion','',fmt0(c.refund)));
   h.push(row('Payment months '+(STUB+1)+'–'+c.nPay+' (base only)','',fmt2(c.moPay)));
-  h.push(hi('Loan fully repaid at month '+c.nPay+' ('+c.payoff+' yr)','$0','pos'));
+  h.push(hi('Loan fully repaid at month '+c.nPay+' ('+dur(c.payoffMo)+')','$0','pos'));
 
   h.push(secH('Step 4 — Your Total Out-of-Pocket'));
   h.push(row('Early payments (months 1–'+STUB+')',fmt2(c.earlyPay)+' × '+STUB,fmt0(c.earlyTotal)));
@@ -417,6 +387,8 @@ let lastC=null;
 function drawChart(c){
   lastC=c;
   const s=c.yearly,H=c.horizon;
+  const cv0=$('chart');cv0.innerHTML='';
+  if(H<1)return;   // nothing to plot for a 0-year horizon
   const maxY=Math.max(...s.map(d=>Math.max(d.rAT,d.w2AT)))*1.08||1;
   const x=t=>Mg.l+(t/H)*PW;
   const y=v=>Mg.t+PH-(v/maxY)*PH;
@@ -520,36 +492,74 @@ function mkTxt(g,x,y,fill,sz,wt){
   t.setAttribute('font-weight',wt);g.appendChild(t);return t;
 }
 
-/* ──────────────────── wiring ──────────────────── */
-const R={
-  borrow:$('r_borrow'),heloc:$('r_heloc'),payoff:$('r_payoff'),
-  marg:$('r_marg'),wd:$('r_wd'),growth:$('r_growth'),hz:$('r_hz')
-};
+/* ──────────────────── controls ──────────────────── */
+/* each parameter has both a slider and a typeable number field, kept in sync */
+const CFG=[
+  {g:'The loan',items:[
+    {k:'borrow',name:'Borrow amount',      min:0,max:500000,step:1000,val:50000, pre:'$', dec:0},
+    {k:'loan',  name:'Loan rate',          min:0,max:15,    step:0.25,val:5,     suf:'%', dec:2},
+    {k:'payoff',name:'Payoff period',      min:1,max:240,   step:1,   val:60,    suf:'mo',dec:0},
+  ]},
+  {g:'Tax rates',items:[
+    {k:'marg',  name:'Marginal rate (now)',      min:0,max:55,step:0.01,val:53.53,suf:'%',dec:2},
+    {k:'wd',    name:'Withdrawal rate (future)', min:0,max:55,step:0.5, val:30,   suf:'%',dec:1},
+  ]},
+  {g:'Growth',items:[
+    {k:'growth',name:'Annual return',      min:0,max:15,step:0.5,val:8, suf:'%', dec:1},
+    {k:'hz',    name:'Projection horizon', min:0,max:40,step:1,  val:30,suf:'yr',dec:0},
+  ]},
+];
+const META={};
+CFG.forEach(g=>g.items.forEach(i=>META[i.k]=i));
+
+const clamp=(v,lo,hi)=>v<lo?lo:v>hi?hi:v;
+const fmtField=(v,dec)=>{const n=+v;return isFinite(n)?n.toFixed(dec):''};
+
+function buildControls(){
+  let html='';
+  for(const g of CFG){
+    html+='<div class="group"><div class="group-label">'+g.g+'</div>';
+    for(const i of g.items){
+      html+='<div class="ctrl"><div class="ctrl-top">'+
+        '<span class="ctrl-name">'+i.name+'</span>'+
+        '<span class="valwrap">'+
+          (i.pre?'<span class="valunit">'+i.pre+'</span>':'')+
+          '<input class="numf" id="n_'+i.k+'" type="number" min="'+i.min+'" max="'+i.max+
+            '" step="'+i.step+'" value="'+i.val+'">'+
+          (i.suf?'<span class="valunit">'+i.suf+'</span>':'')+
+        '</span></div>'+
+        '<input type="range" id="r_'+i.k+'" min="'+i.min+'" max="'+i.max+
+          '" step="'+i.step+'" value="'+i.val+'"></div>';
+    }
+    html+='</div>';
+  }
+  $('controls').innerHTML=html;
+}
+buildControls();
+
+const N=k=>$('n_'+k), RG=k=>$('r_'+k);
+const raw=k=>clamp(+N(k).value||0,META[k].min,META[k].max);
 
 function readP(){return{
-  borrow:+R.borrow.value,heloc:+R.heloc.value/100,marg:+R.marg.value/100,
-  wd:+R.wd.value/100,growth:+R.growth.value/100,payoff:+R.payoff.value,horizon:+R.hz.value
+  borrow:raw('borrow'),heloc:raw('loan')/100,marg:raw('marg')/100,
+  wd:raw('wd')/100,growth:raw('growth')/100,
+  payoff:raw('payoff')/12,horizon:Math.round(raw('hz'))
 }}
 
 function update(){
-  const p=readP(),c=compute(p);
-
-  // update control labels
-  $('v_borrow').textContent=fmt0(p.borrow);
-  $('v_heloc').textContent=fP(p.heloc);
-  $('v_payoff').textContent=p.payoff+' yr';
-  $('v_marg').textContent=fP(p.marg);
-  $('v_wd').textContent=fP(p.wd,0);
-  $('v_growth').textContent=fP(p.growth,1);
-  $('v_hz').textContent=p.horizon+' yr';
-
-  renderW1(c);
-  renderW2(c);
-  renderComp(c);
-  drawChart(c);
+  const c=compute(readP());
+  renderW1(c);renderW2(c);renderComp(c);drawChart(c);
 }
 
-Object.values(R).forEach(el=>el.addEventListener('input',update));
+for(const k in META){
+  const m=META[k];
+  RG(k).addEventListener('input',()=>{N(k).value=fmtField(RG(k).value,m.dec);update()});
+  N(k).addEventListener('input',()=>{RG(k).value=N(k).value;update()});
+  N(k).addEventListener('change',()=>{
+    const v=clamp(+N(k).value||0,m.min,m.max);
+    N(k).value=fmtField(v,m.dec);RG(k).value=v;update();
+  });
+}
 window.addEventListener('resize',()=>lastC&&drawChart(lastC));
 update();
 </script>
